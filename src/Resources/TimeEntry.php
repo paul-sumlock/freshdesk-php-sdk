@@ -30,15 +30,14 @@ class TimeEntry extends AbstractResource
      * @var string
      * @internal
      */
-    protected $endpoint = '/time_entries';
+    protected string $endpoint = '/time_entries';
 
     /**
      * The tickets resource endpoint
      *
-     * @var string
      * @internal
      */
-    private $ticketsEndpoint = '/tickets';
+    private string $ticketsEndpoint = '/tickets';
 
     /**
      * Creates the forums endpoint
@@ -95,7 +94,7 @@ class TimeEntry extends AbstractResource
      * @throws \Freshdesk\Exceptions\UnsupportedAcceptHeaderException
      * @throws \Freshdesk\Exceptions\ValidationException
      */
-    public function all($id, array $query = null)
+    public function all($id, ?array $query = null)
     {
         return $this->api()->request('GET', $this->ticketsEndpoint($id . '/time_entries'), null, $query);
     }

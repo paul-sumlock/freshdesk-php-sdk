@@ -11,14 +11,14 @@ use Freshdesk\Api;
  */
 class ApiTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->class = Api::class;
-    } 
+    }
 
-    public function methodsThatShouldExist()
+    public static function methodsThatShouldExist(): array
     {
         return [
             ['request'],
@@ -33,7 +33,7 @@ class ApiTest extends TestCase
         $this->assertTrue(property_exists($this->class, $property));
     }
 
-    public function publicPropertiesThatShouldExist()
+    public static function publicPropertiesThatShouldExist(): array
     {
         return [
             ['agents'],

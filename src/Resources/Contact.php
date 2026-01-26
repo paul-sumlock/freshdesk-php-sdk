@@ -32,7 +32,7 @@ class Contact extends AbstractResource
      * @var string
      * @internal
      */
-    protected $endpoint = '/contacts';
+    protected string $endpoint = '/contacts';
 
     /**
      * List contact fields
@@ -54,7 +54,7 @@ class Contact extends AbstractResource
      * @throws \Freshdesk\Exceptions\UnsupportedAcceptHeaderException
      * @throws \Freshdesk\Exceptions\ValidationException
      */
-    public function fields(array $query = null)
+    public function fields(?array $query = null)
     {
         return $this->api()->request('GET', '/contact_fields', null, $query);
     }
@@ -81,7 +81,7 @@ class Contact extends AbstractResource
      * @throws \Freshdesk\Exceptions\UnsupportedAcceptHeaderException
      * @throws \Freshdesk\Exceptions\ValidationException
      */
-    public function makeAgent($id, array $query = null)
+    public function makeAgent($id, ?array $query = null)
     {
         $end = $id . '/make_agent';
 
@@ -94,7 +94,7 @@ class Contact extends AbstractResource
      * Hard delete a contact by $id
      *
      * @api
-     * @param in $id contact id
+     * @param int $id contact id
      * @return array|null
      * @throws \Freshdesk\Exceptions\AccessDeniedException
      * @throws \Freshdesk\Exceptions\ApiException

@@ -18,11 +18,11 @@ trait UpdateTrait
 {
 
     /**
-     * @param integer $end string
+     * @param int|string|null $end
      * @return string
      * @internal
      */
-    abstract protected function endpoint($end = null);
+    abstract protected function endpoint(int|string|null $end = null): string;
 
     /**
      * @return \Freshdesk\Api

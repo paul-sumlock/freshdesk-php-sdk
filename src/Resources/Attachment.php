@@ -26,5 +26,5 @@ class Attachment extends AbstractResource
      *
      * @var string
      */
-    protected $endpoint = '/attachments';
+    protected string $endpoint = '/attachments';
 }

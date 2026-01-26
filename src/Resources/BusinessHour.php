@@ -28,5 +28,5 @@ class BusinessHour extends AbstractResource
      * @var string
      * @internal
      */
-    protected $endpoint = '/business_hours';
+    protected string $endpoint = '/business_hours';
 }

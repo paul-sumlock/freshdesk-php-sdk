@@ -31,15 +31,14 @@ class Topic extends AbstractResource
      * @var string
      * @internal
      */
-    protected $endpoint = '/discussions/topics';
+    protected string $endpoint = '/discussions/topics';
 
     /**
      * The forums resource endpoint
      *
-     * @var string
      * @internal
      */
-    private $forumsEndpoint = '/discussions/forums';
+    private string $forumsEndpoint = '/discussions/forums';
 
     /**
      * Creates the forums endpoint
@@ -95,7 +94,7 @@ class Topic extends AbstractResource
      * @throws \Freshdesk\Exceptions\UnsupportedAcceptHeaderException
      * @throws \Freshdesk\Exceptions\ValidationException
      */
-    public function all($id, array $query = null)
+    public function all($id, ?array $query = null)
     {
         return $this->api()->request('GET', $this->forumsEndpoint($id . '/topics'), null, $query);
     }

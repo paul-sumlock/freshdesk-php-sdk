@@ -17,11 +17,11 @@ trait DeleteTrait
 {
 
     /**
-     * @param null $end string
+     * @param int|string|null $end
      * @return string
      * @internal
      */
-    abstract protected function endpoint($end = null);
+    abstract protected function endpoint(int|string|null $end = null): string;
 
     /**
      * @return \Freshdesk\Api
@@ -35,7 +35,7 @@ trait DeleteTrait
      * Delete a resource by $id
      *
      * @api
-     * @param in $id The resource id
+     * @param int $id The resource id
      * @return array|null
      * @throws \Freshdesk\Exceptions\AccessDeniedException
      * @throws \Freshdesk\Exceptions\ApiException

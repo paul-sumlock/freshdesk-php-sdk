@@ -19,17 +19,14 @@ use GuzzleHttp\Exception\RequestException;
  */
 class ApiException extends Exception
 {
-    protected $body = null;
+    protected ?string $body = null;
 
     /**
      * @internal
-     * @param RequestException $e
-     * @return AccessDeniedException|ApiException|AuthenticationException|ConflictingStateException|
-     * MethodNotAllowedException|NotFoundException|RateLimitExceededException|UnsupportedAcceptHeaderException|
-     * UnsupportedContentTypeException|ValidationException
+     * @return AccessDeniedException|ApiException|AuthenticationException|ConflictingStateException|MethodNotAllowedException|NotFoundException|RateLimitExceededException|UnsupportedAcceptHeaderException|UnsupportedContentTypeException|ValidationException
      */
-     public static function create(RequestException $e) {
-
+    public static function create(RequestException $e): self
+    {
          if($response = $e->getResponse()) {
              $body = $response->getBody()->getContents();
 
@@ -59,12 +56,6 @@ class ApiException extends Exception
     }
 
     /**
-     * @var RequestException
-     * @internal
-     */
-    private $exception;
-
-    /**
      * Returns the Request Exception
      *
      * A Guzzle Request Exception is returned
@@ -89,7 +80,7 @@ class ApiException extends Exception
      */
     public function getRequestArray()
     {
-        return json_decode($this->body, true);
+        return json_decode((string) $this->body, true, 512, JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -97,13 +88,15 @@ class ApiException extends Exception
      *
      * Constructs a new exception.
      *
-     * @param RequestException $e
+     * @param RequestException $exception
      * @param null|string $body
      * @internal
      */
-    public function __construct(RequestException $e, $body = null)
+    public function __construct(/**
+     * @internal
+     */
+    private readonly RequestException $exception, ?string $body = null)
     {
-        $this->exception = $e;
         if ($body) {
             $this->body = $body;
         }

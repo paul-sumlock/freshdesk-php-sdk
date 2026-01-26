@@ -28,5 +28,5 @@ class SLAPolicy extends AbstractResource
      * @var string
      * @internal
      */
-    protected $endpoint = '/sla_policy';
+    protected string $endpoint = '/sla_policy';
 }

@@ -32,6 +32,6 @@ class Category extends AbstractResource
      * @var string
      *
      */
-    protected $endpoint = '/discussions/categories';
+    protected string $endpoint = '/discussions/categories';
 
 }

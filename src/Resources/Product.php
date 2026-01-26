@@ -27,5 +27,5 @@ class Product extends AbstractResource
      * @internal
      *
      */
-    protected $endpoint = '/products';
+    protected string $endpoint = '/products';
 }

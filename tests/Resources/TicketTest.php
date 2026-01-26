@@ -11,14 +11,14 @@ use Freshdesk\Resources\Ticket;
  */
 class TicketApiTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->class = Ticket::class;
     }
 
-    public function methodsThatShouldExist()
+    public static function methodsThatShouldExist(): array
     {
         return [
             ['create'],
@@ -34,5 +34,4 @@ class TicketApiTest extends TestCase
             ['search']
         ];
     }
-
 }

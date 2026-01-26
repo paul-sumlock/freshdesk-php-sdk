@@ -32,7 +32,7 @@ class Company extends AbstractResource
      * @internal
      * @var string
      */
-    protected $endpoint = '/companies';
+    protected string $endpoint = '/companies';
 
     /**
      * List resource fields
@@ -51,7 +51,7 @@ class Company extends AbstractResource
      * @throws \Freshdesk\Exceptions\UnsupportedAcceptHeaderException
      * @throws \Freshdesk\Exceptions\ValidationException
      */
-    public function fields(array $query = null)
+    public function fields(?array $query = null)
     {
         return $this->api()->request('GET', '/company_fields', null, $query);
     }

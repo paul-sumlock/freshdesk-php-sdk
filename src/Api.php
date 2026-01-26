@@ -16,6 +16,8 @@ use Freshdesk\Exceptions\RateLimitExceededException;
 use Freshdesk\Exceptions\UnsupportedContentTypeException;
 use Freshdesk\Resources\Agent;
 use Freshdesk\Resources\BusinessHour;
+use Freshdesk\Resources\CannedResponses;
+use Freshdesk\Resources\CannedResponseFolders;
 use Freshdesk\Resources\Category;
 use Freshdesk\Resources\Comment;
 use Freshdesk\Resources\Company;
@@ -176,6 +178,22 @@ class Api
     public $slaPolicies;
 
     /**
+     * Canned Responses resources
+     *
+     * @api
+     * @var CannedResponses
+     */
+    public $cannedResponses;
+
+    /**
+     * Canned Response Folders resources
+     *
+     * @api
+     * @var CannedResponseFolders
+     */
+    public $cannedResponseFolders;
+
+    /**
      * @internal
      * @var Client
      */
@@ -183,9 +201,8 @@ class Api
 
     /**
      * @internal
-     * @var string
      */
-    private $baseUrl;
+    private readonly string $baseUrl;
 
     /**
      * Constructs a new api instance
@@ -224,7 +241,7 @@ class Api
      * @throws RateLimitExceededException
      * @throws UnsupportedContentTypeException
      */
-    public function request($method, $endpoint, array $data = null, array $query = null)
+    public function request(string $method, string $endpoint, ?array $data = null, ?array $query = null): mixed
     {
 
 		if (isset($data['attachments'])) {
@@ -321,18 +338,13 @@ class Api
     private function performRequest($method, $url, $options) {
 
         try {
-            switch ($method) {
-                case 'GET':
-                    return json_decode($this->client->get($url, $options)->getBody(), true);
-                case 'POST':
-                    return json_decode($this->client->post($url, $options)->getBody(), true);
-                case 'PUT':
-                    return json_decode($this->client->put($url, $options)->getBody(), true);
-                case 'DELETE':
-                    return json_decode($this->client->delete($url, $options)->getBody(), true);
-                default:
-                    return null;
-            }
+            return match ($method) {
+                'GET' => json_decode($this->client->get($url, $options)->getBody(), true, 512, JSON_THROW_ON_ERROR),
+                'POST' => json_decode($this->client->post($url, $options)->getBody(), true, 512, JSON_THROW_ON_ERROR),
+                'PUT' => json_decode($this->client->put($url, $options)->getBody(), true, 512, JSON_THROW_ON_ERROR),
+                'DELETE' => json_decode($this->client->delete($url, $options)->getBody(), true, 512, JSON_THROW_ON_ERROR),
+                default => null,
+            };
         } catch (RequestException $e) {
             throw ApiException::create($e);
         }
@@ -387,5 +399,9 @@ class Api
         $this->emailConfigs = new EmailConfig($this);
         $this->slaPolicies = new SLAPolicy($this);
         $this->businessHours = new BusinessHour($this);
+
+        //Canned Responses
+        $this->cannedResponses = new CannedResponses($this);
+        $this->cannedResponseFolders = new CannedResponseFolders($this);
     }
 }

@@ -28,15 +28,14 @@ class Conversation extends AbstractResource
      * @internal
      * @var string
      */
-    protected $endpoint = '/conversations';
+    protected string $endpoint = '/conversations';
 
     /**
      * The ticket resource endpoint
      *
-     * @var string
      * @internal
      */
-    private $ticketsEndpoint = '/tickets';
+    private string $ticketsEndpoint = '/tickets';
 
     /**
      * Creates the ticket endpoint

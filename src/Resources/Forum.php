@@ -33,7 +33,7 @@ class Forum extends AbstractResource
      * @var string
      * @internal
      */
-    protected $endpoint = '/discussions/forums';
+    protected string $endpoint = '/discussions/forums';
 
     /**
      * The resource endpoint

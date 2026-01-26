@@ -10,25 +10,20 @@ namespace Freshdesk\tests;
 
 use Freshdesk\Api;
 
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
+    abstract public static function methodsThatShouldExist(): array;
 
-    abstract function methodsThatShouldExist();
-
-    /**
-     * @var Api
-     */
-    protected $api;
+    protected Api $api;
 
     /**
      * The specific class being tested
-     * @var
      */
-    protected $class;
+    protected mixed $class;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->api = new Api("foo", "bar");
+        $this->api = new Api('foo', 'bar');
     }
 
     /**
@@ -59,9 +54,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
     protected function invokeMethod($method, array $params)
     {
-        $reflection = new \ReflectionClass(get_class($this->class));
+        $reflection = new \ReflectionClass($this->class::class);
         $method = $reflection->getMethod($method);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($this->class, $params);
     }

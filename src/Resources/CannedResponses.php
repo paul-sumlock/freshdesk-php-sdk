@@ -1,63 +1,71 @@
 <?php
+
 /**
- * Created by PhpStorm.
- * User: Matt
- * Date: 20/04/2016
- * Time: 2:32 PM
+ * @author    SeyVillas GmbH
+ * @copyright Copyright (c) 2023 SeyVillas GmbH, Kopernikusstr. 24, 10245 Berlin, https://www.seyvillas.com
+ * @created   11/04/23 12:32
  */
+
+declare(strict_types=1);
 
 namespace Freshdesk\Resources;
 
+use Freshdesk\Resources\Traits\AllTrait;
+use Freshdesk\Resources\Traits\CreateTrait;
 use Freshdesk\Resources\Traits\DeleteTrait;
 use Freshdesk\Resources\Traits\UpdateTrait;
 use Freshdesk\Resources\Traits\ViewTrait;
 
 /**
- * Comment resource
+ * Ticket resource
  *
- * This provides access to the comment resources
+ * Provides access to ticket resources
  *
  * @package Api\Resources
  */
-class Comment extends AbstractResource
+class CannedResponses extends AbstractResource
 {
 
-    use ViewTrait, UpdateTrait, DeleteTrait;
+    use CreateTrait, ViewTrait, UpdateTrait, DeleteTrait;
 
     /**
-     * The topic resource endpoint
+     * The resource endpoint
      *
      * @var string
-     * @internal
      */
-    protected string $endpoint = '/discussions/comments';
+    protected string $endpoint = '/canned_responses';
 
     /**
-     * The forums resource endpoint
+     * List ticket fields
      *
-     * @internal
-     */
-    private string $topicsEndpoint = '/discussions/topics';
-
-    /**
-     * Creates the forums endpoint
+     * The agent whose credentials (API key or username/password) are being used to make this API call should be
+     * authorised to view the ticket fields
      *
-     * @param string $id
-     * @return string
-     * @internal
+     * @param array|null $query
+     * @return mixed|null
+     * @throws \Freshdesk\Exceptions\AccessDeniedException
+     * @throws \Freshdesk\Exceptions\ApiException
+     * @throws \Freshdesk\Exceptions\AuthenticationException
+     * @throws \Freshdesk\Exceptions\ConflictingStateException
+     * @throws \Freshdesk\Exceptions\NotFoundException
+     * @throws \Freshdesk\Exceptions\RateLimitExceededException
+     * @throws \Freshdesk\Exceptions\UnsupportedContentTypeException
+     * @throws \Freshdesk\Exceptions\MethodNotAllowedException
+     * @throws \Freshdesk\Exceptions\UnsupportedAcceptHeaderException
+     * @throws \Freshdesk\Exceptions\ValidationException
      */
-    protected function topicsEndpoint($id = null)
+    public function fields(?array $query = null)
     {
-        return $id === null ? $this->topicsEndpoint : $this->topicsEndpoint . '/' . $id;
+        return $this->api()->request('GET', '/ticket_fields', null, $query);
     }
 
     /**
+     * Filters by ticket fields
      *
-     * Create a topic for a forum
+     * Make sure to pass a valid $filtersQuery string example: "type:question"
      *
      * @api
-     * @param int $id
-     * @param array $data
+     * @param string $filtersQuery
      * @return array|null
      * @throws \Freshdesk\Exceptions\AccessDeniedException
      * @throws \Freshdesk\Exceptions\ApiException
@@ -70,32 +78,12 @@ class Comment extends AbstractResource
      * @throws \Freshdesk\Exceptions\UnsupportedAcceptHeaderException
      * @throws \Freshdesk\Exceptions\ValidationException
      */
-    public function create($id, array $data)
+    public function search(string $filtersQuery)
     {
-        return $this->api()->request('POST', $this->topicsEndpoint($id . '/topics'), $data);
-    }
-
-    /**
-     *
-     * List comments in a topic
-     *
-     * @api
-     * @param int $id
-     * @param array $query
-     * @return array|null
-     * @throws \Freshdesk\Exceptions\AccessDeniedException
-     * @throws \Freshdesk\Exceptions\ApiException
-     * @throws \Freshdesk\Exceptions\AuthenticationException
-     * @throws \Freshdesk\Exceptions\ConflictingStateException
-     * @throws \Freshdesk\Exceptions\NotFoundException
-     * @throws \Freshdesk\Exceptions\RateLimitExceededException
-     * @throws \Freshdesk\Exceptions\UnsupportedContentTypeException
-     * @throws \Freshdesk\Exceptions\MethodNotAllowedException
-     * @throws \Freshdesk\Exceptions\UnsupportedAcceptHeaderException
-     * @throws \Freshdesk\Exceptions\ValidationException
-     */
-    public function all($id, ?array $query = null)
-    {
-        return $this->api()->request('GET', $this->topicsEndpoint($id . '/comments'), null, $query);
+        $end = '/search'.$this->endpoint();
+        $query = [
+            'query' => '"'.$filtersQuery.'"',
+        ];
+        return $this->api()->request('GET', $end, null, $query);
     }
 }

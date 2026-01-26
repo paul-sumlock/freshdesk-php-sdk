@@ -33,6 +33,6 @@ class Group extends AbstractResource
      * @var string
      * @internal
      */
-    protected $endpoint = '/groups';
+    protected string $endpoint = '/groups';
 
 }

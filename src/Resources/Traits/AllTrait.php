@@ -17,11 +17,11 @@ trait AllTrait
 {
 
     /**
-     * @param null $end string
+     * @param int|string|null $end
      * @return string
      * @internal
      */
-    abstract protected function endpoint($end = null);
+    abstract protected function endpoint(int|string|null $end = null): string;
 
     /**
      * @return \Freshdesk\Api
@@ -48,7 +48,7 @@ trait AllTrait
      * @throws \Freshdesk\Exceptions\UnsupportedAcceptHeaderException
      * @throws \Freshdesk\Exceptions\ValidationException
      */
-    public function all(array $query = null)
+    public function all(?array $query = null)
     {
         return $this->api()->request('GET', $this->endpoint(), null, $query);
     }

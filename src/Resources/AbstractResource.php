@@ -22,16 +22,9 @@ abstract class AbstractResource
 {
 
     /**
-     * @var Api
      * @internal
      */
-    private $api;
-
-    /**
-     * @var String
-     * @internal
-     */
-    protected $endpoint;
+    protected string $endpoint;
 
     /**
      * Resource constructor
@@ -42,20 +35,23 @@ abstract class AbstractResource
      * @internal
      *
      */
-    public function __construct(Api $api)
+    public function __construct(
+        /**
+         * @internal
+         */
+        private readonly Api $api
+    )
     {
-        $this->api = $api;
     }
 
     /**
      * Creates the endpoint
      *
-     * @param null $id The endpoint terminator
+     * @param int|string|null $id The endpoint terminator
      * @return string
      * @internal
-     *
      */
-    protected function endpoint($id = null)
+    protected function endpoint(int|string|null $id = null): string
     {
         return $id === null ? $this->endpoint : $this->endpoint . '/' . $id;
     }
