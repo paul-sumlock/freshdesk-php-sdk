@@ -32,6 +32,7 @@ use Freshdesk\Resources\Ticket;
 use Freshdesk\Resources\Attachment;
 use Freshdesk\Resources\TimeEntry;
 use Freshdesk\Resources\Topic;
+use Freshdesk\Logging\ApiLogger;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
@@ -204,19 +205,23 @@ class Api
      */
     private readonly string $baseUrl;
 
+    private readonly ?ApiLogger $logger;
+
     /**
      * Constructs a new api instance
      *
      * @api
      * @param string $apiKey
      * @param string $domain
+     * @param ApiLogger|null $logger
      * @throws Exceptions\InvalidConfigurationException
      */
-    public function __construct($apiKey, $domain)
+    public function __construct($apiKey, $domain, ?ApiLogger $logger = null)
     {
         $this->validateConstructorArgs($apiKey, $domain);
 
         $this->baseUrl = sprintf('https://%s.freshdesk.com/api/v2', $domain);
+        $this->logger = $logger;
 
         $this->client = new Client([
                 'auth' => [$apiKey, 'X']
@@ -318,7 +323,16 @@ class Api
 
         $url = $this->baseUrl . $endpoint;
 
-        return $this->performRequest($method, $url, $options);
+        $this->logger?->logRequest($method, $endpoint, $data);
+
+        try {
+            $result = $this->performRequest($method, $url, $options);
+            $this->logger?->logResponse($method, $endpoint, $result);
+            return $result;
+        } catch (\Throwable $e) {
+            $this->logger?->logErrorResponse($method, $endpoint, $e);
+            throw $e;
+        }
     }
 
     /**
