@@ -352,13 +352,24 @@ class Api
     private function performRequest($method, $url, $options) {
 
         try {
-            return match ($method) {
-                'GET' => json_decode($this->client->get($url, $options)->getBody(), true, 512, JSON_THROW_ON_ERROR),
-                'POST' => json_decode($this->client->post($url, $options)->getBody(), true, 512, JSON_THROW_ON_ERROR),
-                'PUT' => json_decode($this->client->put($url, $options)->getBody(), true, 512, JSON_THROW_ON_ERROR),
-                'DELETE' => json_decode($this->client->delete($url, $options)->getBody(), true, 512, JSON_THROW_ON_ERROR),
+            $response = match ($method) {
+                'GET' => $this->client->get($url, $options),
+                'POST' => $this->client->post($url, $options),
+                'PUT' => $this->client->put($url, $options),
+                'DELETE' => $this->client->delete($url, $options),
                 default => null,
             };
+
+            if ($response === null) {
+                return null;
+            }
+
+            $body = (string) $response->getBody();
+            if ($body === '') {
+                return null;
+            }
+
+            return json_decode($body, true, 512, JSON_THROW_ON_ERROR);
         } catch (RequestException $e) {
             throw ApiException::create($e);
         }
