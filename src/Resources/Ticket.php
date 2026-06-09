@@ -130,7 +130,31 @@ class Ticket extends AbstractResource
 
         return $this->api()->request('GET', $this->endpoint($end), null, $query);
     }
-    
+
+    /**
+     * List summary associated with a ticket
+     *
+     * @param int $id the ticket id
+     * @param array|null $query
+     * @return mixed|null
+     * @ @throws \Freshdesk\Exceptions\AccessDeniedException
+     * @throws \Freshdesk\Exceptions\ApiException
+     * @throws \Freshdesk\Exceptions\AuthenticationException
+     * @throws \Freshdesk\Exceptions\ConflictingStateException
+     * @throws \Freshdesk\Exceptions\NotFoundException
+     * @throws \Freshdesk\Exceptions\RateLimitExceededException
+     * @throws \Freshdesk\Exceptions\UnsupportedContentTypeException
+     * @throws \Freshdesk\Exceptions\MethodNotAllowedException
+     * @throws \Freshdesk\Exceptions\UnsupportedAcceptHeaderException
+     * @throws \Freshdesk\Exceptions\ValidationException
+     */
+    public function summary($id, ?array $query = null)
+    {
+        $end = $id . '/summary';
+
+        return $this->()->request('GET', $this->endpoint($end), null, $query);
+    }
+
     /**
      * Filters by ticket fields
      *
