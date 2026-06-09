@@ -152,7 +152,7 @@ class Ticket extends AbstractResource
     {
         $end = $id . '/summary';
 
-        return $this->()->request('GET', $this->endpoint($end), null, $query);
+        return $this->api()->request('GET', $this->endpoint($end), null, $query);
     }
 
     /**
