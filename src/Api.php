@@ -29,7 +29,6 @@ use Freshdesk\Resources\Group;
 use Freshdesk\Resources\Product;
 use Freshdesk\Resources\SLAPolicy;
 use Freshdesk\Resources\Ticket;
-use Freshdesk\Resources\Summary;
 use Freshdesk\Resources\Attachment;
 use Freshdesk\Resources\TimeEntry;
 use Freshdesk\Resources\Topic;
